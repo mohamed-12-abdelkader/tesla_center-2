@@ -1,7 +1,9 @@
 import React from "react";
 import { Slide, Zoom } from "react-awesome-reveal";
 import img from "../../imgs/new-droosy.png";
+import { useUserContext } from "../../context/Context";
 const SectionOne = () => {
+  const {} = useUserContext();
   return (
     <div className="row">
       <div className="col-md-12">
@@ -10,12 +12,12 @@ const SectionOne = () => {
             <div className="flex-fill ">
               <div className="container tesla" style={{ marginTop: "120px" }}>
                 <Slide>
-                  <h1>Tesla Center Online</h1>
+                  <h1 style={{ fontWeight: "bold" }}>Tesla Center </h1>
                   <p style={{ marginTop: "30px", color: "white" }}>
                     Tesla Center <br />
                     هى منصة تعليمية تهدف لتطوير التعليم <br />
                     والنهوض بمستوى الطالب عن طريق <br />
-                    احدث الادوات وافضل الاساليب{" "}
+                    احدث الادوات وافضل الاساليب
                   </p>
                 </Slide>
               </div>

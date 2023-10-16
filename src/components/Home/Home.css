@@ -1,0 +1,8 @@
+@media only screen and (max-width: 600px) {
+  .tesla-container {
+    display: block !important;
+  }
+  .flex-fill {
+    width: 100%;
+  }
+}

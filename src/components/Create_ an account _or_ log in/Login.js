@@ -23,10 +23,15 @@ const Login = () => {
             width: "500px",
             boxShadow: " 0 0 10px rgba(0, 0, 0, 0.5)",
             marginBottom: "50px",
+            backgroundColor: "#cccccc42",
+            borderRadius: "20px",
           }}
         >
           <div>
-            <h3 style={{ margin: "20px", color: "white" }}> تسجيل الدخول </h3>
+            <h3 style={{ margin: "20px", color: "white", fontWeight: "bold" }}>
+              {" "}
+              تسجيل الدخول{" "}
+            </h3>
           </div>
           <div
             style={{

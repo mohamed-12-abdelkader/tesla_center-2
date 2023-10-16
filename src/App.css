@@ -1,3 +1,29 @@
+h1 {
+  color: white;
+  font-weight: bold;
+}
+
+p {
+  font-size: 30px;
+  color: white;
+  font-weight: 600;
+  color: rgb(72, 68, 68);
+}
+
+li {
+  margin-top: 15px;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(72, 68, 68);
+}
+h3 {
+  color: rgb(72, 68, 68);
+}
+
+h6 {
+  color: rgb(72, 68, 68);
+}
+
 /*btn style*/
 
 .btn {
@@ -66,7 +92,6 @@
 /* ==button storey style==*/
 .form {
   background-image: url(../public/gradient.png);
-  background-repeat: no-repeat;
   background-size: cover;
 }
 
@@ -74,4 +99,9 @@
   background-image: url(../public/icon_shape.png);
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.accordion-button {
+  display: flex !important;
+  justify-content: space-between !important;
 }

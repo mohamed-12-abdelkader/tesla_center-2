@@ -4,8 +4,9 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
-
+import { useUserContext } from "../../context/Context";
 function Header() {
+  const { login } = useUserContext();
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
@@ -23,15 +24,27 @@ function Header() {
             style={{ maxHeight: "100px" }}
             navbarScroll
           ></Nav>
-          <Form className="d-flex">
-            <Link to="/login">
-              <Button>تسجيل الدخول </Button>
-            </Link>
+          {login ? (
+            <Form className="d-flex">
+              <Link to="/login">
+                <Button>تسجيل الدخول </Button>
+              </Link>
 
-            <Link to="/createAccount">
-              <Button variant="outline-success">انشاء الحساب </Button>
-            </Link>
-          </Form>
+              <Link to="/createAccount">
+                <Button variant="outline-success">انشاء الحساب </Button>
+              </Link>
+            </Form>
+          ) : (
+            <>
+              <ul>
+                <li>
+                  <a>mktklh</a>
+                  <a>mktklh</a>
+                  <a>mktklh</a>
+                </li>
+              </ul>
+            </>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>
