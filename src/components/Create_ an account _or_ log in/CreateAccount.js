@@ -2,19 +2,46 @@ import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import { Button } from "../Ui";
 import MenuItem from "@mui/material/MenuItem";
-import { useUserContext } from "../../context/Context";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+const CreateAccount = ({ history }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [password_confirmation, setPassword_confirmation] = useState("");
+  const [grades, setGrades] = useState([]);
+  const [specializations, setSpecializations] = useState([]);
+  const [selectedSpecialization, setSelectedSpecialization] = useState(null);
+  const [grade_id, setSelectedGrade] = useState(null);
+  const Navigate = useNavigate();
+  const fetchSpecializations = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8000/api/v1/specializations"
+      );
+      setSpecializations(response.data);
+    } catch (error) {
+      console.error("Error fetching specializations:", error);
+    }
+  };
 
-const CreateAccount = () => {
-  const {
-    studentsData,
-    setStudentsData,
-    specializations,
-    selectedSpecialization,
-    setSelectedSpecialization,
-    grades,
-    selectedGrade,
-    setSelectedGrade,
-  } = useUserContext();
+  useEffect(() => {
+    fetchSpecializations();
+  }, []);
+
+  useEffect(() => {
+    if (selectedSpecialization) {
+      axios
+        .get(`http://localhost:8000/api/v1/grades/${selectedSpecialization.id}`)
+        .then((response) => {
+          setGrades(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching grades:", error);
+        });
+    }
+  }, [selectedSpecialization]);
 
   const handleSpecializationChange = (event) => {
     const selectedSpecId = parseInt(event.target.value, 10);
@@ -22,21 +49,61 @@ const CreateAccount = () => {
       (spec) => spec.id === selectedSpecId
     );
     setSelectedSpecialization(selectedSpec);
-    setSelectedGrade(null); // Reset selectedGrade when changing specialization
+    setSelectedGrade(null);
   };
 
-  // في handleGradeChange
   const handleGradeChange = (event) => {
     const selectedGradeId = parseInt(event.target.value, 10);
     const selectedGrd = grades.find((grade) => grade.id === selectedGradeId);
     setSelectedGrade(selectedGrd);
   };
 
+  const handleCreateAccount = async (e) => {
+    e.preventDefault();
+
+    // Prepare the data to send to the server
+    const userData = {
+      name,
+      email,
+      phone,
+      password,
+      password_confirmation,
+      grade_id,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/student/register",
+        userData
+      );
+
+      // If registration is successful, you can redirect the user
+      if (response.status === 200) {
+        // Redirect to the home page or another desired page
+        Navigate("/home");
+      } else {
+        // Handle any other responses or errors
+        console.error("Registration failed:", response);
+        // You can display an alert or error message here
+        alert("Registration failed. Please try again.");
+      }
+    } catch (error) {
+      // Handle any network errors
+      console.error("Error during registration:", error);
+      // You can display an alert or error message here
+      alert("An error occurred during registration. Please try again.");
+    }
+  };
+
   return (
     <div className="form" style={{ textAlign: "center" }}>
       <div style={{ textAlign: "center" }}>
         <h1
-          style={{ marginBottom: "50px", color: "white", fontWeight: "bold" }}
+          style={{
+            marginBottom: "50px",
+            color: "white",
+            fontWeight: "bold",
+          }}
         >
           {" "}
           Tesla center{" "}
@@ -46,7 +113,7 @@ const CreateAccount = () => {
         <form
           style={{
             width: "500px",
-            boxShadow: " 0 0 10px rgba(0, 0, 0, 0.5)",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
             marginBottom: "50px",
             backgroundColor: "#cccccc42",
             borderRadius: "20px",
@@ -54,7 +121,7 @@ const CreateAccount = () => {
         >
           <div>
             <h3 style={{ margin: "20px", color: "white", fontWeight: "bold" }}>
-              انشاء حساب جديد{" "}
+              إنشاء حساب جديد{" "}
             </h3>
           </div>
           <div
@@ -66,71 +133,57 @@ const CreateAccount = () => {
             }}
           >
             <TextField
-              id="outlined-basic"
-              label="  الاسم كامل "
+              id="full-name"
+              label="الاسم الكامل"
               variant="outlined"
-              value={studentsData.fullName}
-              onChange={(e) =>
-                setStudentsData({ ...studentsData, fullName: e.target.value })
-              }
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               style={{
                 margin: "10px ",
                 backgroundColor: "white",
               }}
             />
             <TextField
-              id="outlined-basic"
-              label="الايميل "
+              id="email"
+              label="البريد الإلكتروني"
               variant="outlined"
-              value={studentsData.email}
-              onChange={(e) =>
-                setStudentsData({ ...studentsData, email: e.target.value })
-              }
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               style={{
                 margin: "10px ",
                 backgroundColor: "white",
               }}
             />
             <TextField
-              id="outlined-basic"
-              label="رقم الهاتف "
+              id="phone"
+              label="رقم الهاتف"
               variant="outlined"
-              value={studentsData.phoneNumber}
-              onChange={(e) =>
-                setStudentsData({
-                  ...studentsData,
-                  phoneNumber: e.target.value,
-                })
-              }
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               style={{
                 margin: "10px ",
                 backgroundColor: "white",
               }}
             />
             <TextField
-              id="outlined-basic"
-              label="كلمة السر "
+              id="password"
+              type="password"
+              label="كلمة المرور"
               variant="outlined"
-              value={studentsData.password}
-              onChange={(e) =>
-                setStudentsData({ ...studentsData, password: e.target.value })
-              }
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               style={{
                 margin: "10px ",
                 backgroundColor: "white",
               }}
             />
             <TextField
-              id="outlined-basic"
-              label="تاكيد كلمة السر   "
+              id="password-confirmation"
+              type="password"
+              label="تاكيد كلمة المرور  "
               variant="outlined"
-              value={studentsData.confirmPassword}
-              onChange={(e) =>
-                setStudentsData({
-                  ...studentsData,
-                  confirmPassword: e.target.value,
-                })
-              }
+              value={password_confirmation}
+              onChange={(e) => setPassword_confirmation(e.target.value)}
               style={{
                 margin: "10px ",
                 backgroundColor: "white",
@@ -153,9 +206,9 @@ const CreateAccount = () => {
 
             <TextField
               select
-              label="اختر الصف:"
+              label="اختر الصف"
               variant="outlined"
-              value={selectedGrade ? selectedGrade.id : ""}
+              value={grade_id ? grade_id.id : ""}
               onChange={handleGradeChange}
               style={{ margin: "10px", backgroundColor: "white" }}
             >
@@ -165,7 +218,8 @@ const CreateAccount = () => {
                 </MenuItem>
               ))}
             </TextField>
-            <Button>انشاء الحساب</Button>
+
+            <Button onClick={handleCreateAccount}>إنشاء الحساب</Button>
           </div>
         </form>
       </div>
