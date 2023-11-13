@@ -2,6 +2,9 @@ h1 {
   color: white;
   font-weight: bold;
 }
+.App {
+  font-family: "Cairo", sans-serif;
+}
 
 p {
   font-size: 30px;
@@ -22,6 +25,35 @@ h3 {
 
 h6 {
   color: rgb(72, 68, 68);
+}
+a {
+  text-decoration: none !important;
+}
+.card,
+.card-2,
+.container-card {
+  background-color: #fff;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3), -5px -5px 10px rgba(0, 0, 0, 0.3);
+  transition: 0.5s;
+}
+
+.accordion {
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3), -5px -5px 10px rgba(0, 0, 0, 0.3);
+}
+.container-Accordion {
+  border: none;
+
+  display: flex;
+  align-items: center;
+  background: #ccc;
+}
+
+.card:hover {
+  transform: scale(1.1);
+}
+
+.card-lectur:hover {
+  transform: scale(1.05);
 }
 
 /*btn style*/
@@ -82,7 +114,7 @@ h6 {
 
 .btn-icon {
   padding: 0;
-  border-radius: 20rem;
+  border-radius: 50%;
   width: 3rem;
   height: 3rem;
   display: flex;
@@ -104,4 +136,215 @@ h6 {
 .accordion-button {
   display: flex !important;
   justify-content: space-between !important;
+}
+
+.link {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.link:hover {
+  background-color: #e8e8e8;
+}
+
+#upload-photo {
+  position: absolute;
+}
+
+.header {
+  position: relative;
+  text-align: center;
+  background: linear-gradient(
+    60deg,
+    rgba(84, 58, 183, 1) 0%,
+    rgba(0, 172, 193, 1) 100%
+  );
+  color: white;
+}
+.logo {
+  width: 50px;
+  fill: white;
+  padding-right: 15px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.inner-header {
+  height: 65vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.flex {
+  /*Flexbox for containers*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.waves {
+  position: relative;
+  width: 100%;
+  height: 15vh;
+  margin-bottom: -7px; /*Fix for safari gap*/
+  min-height: 100px;
+  max-height: 150px;
+}
+
+.content {
+  position: relative;
+  height: 20vh;
+  text-align: center;
+  background-color: white;
+}
+
+/* Animation */
+
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+@keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+/*Shrinking for mobile*/
+@media (max-width: 768px) {
+  .waves {
+    height: 40px;
+    min-height: 40px;
+  }
+  .content {
+    height: 30vh;
+  }
+  h1 {
+    font-size: 24px;
+  }
+}
+
+/* جعل صفحة ال Home متجاوبة مع كل الشاشات */
+
+@media (max-width: 450px) {
+  .content {
+    display: block !important;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .footer {
+    font-size: 13px !important;
+    text-align: center;
+  }
+}
+@media screen and (max-width: 768px) {
+  .footer {
+    font-size: 15px !important;
+    text-align: center;
+  }
+}
+
+.circle {
+  width: 400px;
+  height: 400px;
+  margin-top: 50px;
+  border: 2px black;
+  border-style: dashed;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.description {
+  margin-top: 100px !important;
+  display: block;
+  display: flex;
+  width: 80%;
+  margin: auto;
+  z-index: -1;
+}
+
+.description .icon {
+  height: 200px;
+  width: 200px;
+  background-color: aqua;
+  border-radius: 50%;
+  margin: auto;
+}
+
+.description .icon-div {
+  margin: auto;
+  position: relative;
+}
+.icon-div h5 {
+  margin-top: 15px;
+  text-align: center;
+
+  width: 250px;
+  height: 40px;
+  background-color: #294d61;
+  border-radius: 10px;
+  color: white;
+  font-size: 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-with-animation {
+  animation: bounce 1s infinite alternate;
+  width: 400px; /* تحديد عرض الصورة هنا */
+}
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-20px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+}
+
+@media screen and (max-width: 450px) {
+  .card-2 {
+    width: 90% !important;
+  }
+  .teacher-container {
+    justify-content: center;
+  }
+  .container {
+    width: 90% !important;
+  }
+  .card-courses {
+    width: 98% !important;
+  }
+  .video {
+    width: 120% !important;
+    height: 300px;
+  }
 }

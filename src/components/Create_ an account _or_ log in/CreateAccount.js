@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
-import TextField from "@mui/material/TextField";
-import { Button } from "../Ui";
-import MenuItem from "@mui/material/MenuItem";
+import PersonIcon from "@mui/icons-material/Person";
+import { Button, TextField, MenuItem } from "@mui/material";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import PhoneIcon from "@mui/icons-material/Phone";
+import LockIcon from "@mui/icons-material/Lock";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import img from "../../imgs/student.png";
+import { Container, Row, Col } from "react-bootstrap";
+import baseUrl from "../../Api/baseURL";
+import ScrollToTop from "../Scroll/ScrollToTop";
 const CreateAccount = ({ history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,25 +21,34 @@ const CreateAccount = ({ history }) => {
   const [selectedSpecialization, setSelectedSpecialization] = useState(null);
   const [grade_id, setSelectedGrade] = useState(null);
   const Navigate = useNavigate();
+
   const fetchSpecializations = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8000/api/v1/specializations"
-      );
+      const response = await axios.get(`${baseUrl}/api/v1/specializations`);
       setSpecializations(response.data);
     } catch (error) {
       console.error("Error fetching specializations:", error);
     }
   };
 
+  const fetchCSRFTOKEN = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const response = await axios.get("/sanctum/csrf-cookie");
+    } catch (error) {
+      console.error("Error fetching csrf-token:", error);
+    }
+  };
+
   useEffect(() => {
     fetchSpecializations();
+    fetchCSRFTOKEN();
   }, []);
 
   useEffect(() => {
     if (selectedSpecialization) {
       axios
-        .get(`http://localhost:8000/api/v1/grades/${selectedSpecialization.id}`)
+        .get(`${baseUrl}/api/v1/grades/${selectedSpecialization.id}`)
         .then((response) => {
           setGrades(response.data.data);
         })
@@ -58,171 +73,125 @@ const CreateAccount = ({ history }) => {
     setSelectedGrade(selectedGrd);
   };
 
-  const handleCreateAccount = async (e) => {
-    e.preventDefault();
-
-    // Prepare the data to send to the server
-    const userData = {
-      name,
-      email,
-      phone,
-      password,
-      password_confirmation,
-      grade_id,
-    };
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/student/register",
-        userData
-      );
-
-      // If registration is successful, you can redirect the user
-      if (response.status === 200) {
-        // Redirect to the home page or another desired page
-        Navigate("/home");
-      } else {
-        // Handle any other responses or errors
-        console.error("Registration failed:", response);
-        // You can display an alert or error message here
-        alert("Registration failed. Please try again.");
-      }
-    } catch (error) {
-      // Handle any network errors
-      console.error("Error during registration:", error);
-      // You can display an alert or error message here
-      alert("An error occurred during registration. Please try again.");
-    }
-  };
-
   return (
-    <div className="form" style={{ textAlign: "center" }}>
-      <div style={{ textAlign: "center" }}>
-        <h1
-          style={{
-            marginBottom: "50px",
-            color: "white",
-            fontWeight: "bold",
-          }}
-        >
-          {" "}
-          Tesla center{" "}
-        </h1>
-      </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <form
-          style={{
-            width: "500px",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
-            marginBottom: "50px",
-            backgroundColor: "#cccccc42",
-            borderRadius: "20px",
-          }}
-        >
-          <div>
-            <h3 style={{ margin: "20px", color: "white", fontWeight: "bold" }}>
-              إنشاء حساب جديد{" "}
+    <div>
+      <Container style={{ marginTop: "100px" }}>
+        <Row>
+          <Col lg={6} md={12}>
+            <h3 style={{ direction: "rtl" }}>
+              انشئ <span style={{ color: "red" }}> حسابك الان :</span>
             </h3>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              width: "450px",
-              margin: "auto",
-              marginBottom: "20px",
-            }}
-          >
-            <TextField
-              id="full-name"
-              label="الاسم الكامل"
-              variant="outlined"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              style={{
-                margin: "10px ",
-                backgroundColor: "white",
-              }}
-            />
-            <TextField
-              id="email"
-              label="البريد الإلكتروني"
-              variant="outlined"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                margin: "10px ",
-                backgroundColor: "white",
-              }}
-            />
-            <TextField
-              id="phone"
-              label="رقم الهاتف"
-              variant="outlined"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              style={{
-                margin: "10px ",
-                backgroundColor: "white",
-              }}
-            />
-            <TextField
-              id="password"
-              type="password"
-              label="كلمة المرور"
-              variant="outlined"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                margin: "10px ",
-                backgroundColor: "white",
-              }}
-            />
-            <TextField
-              id="password-confirmation"
-              type="password"
-              label="تاكيد كلمة المرور  "
-              variant="outlined"
-              value={password_confirmation}
-              onChange={(e) => setPassword_confirmation(e.target.value)}
-              style={{
-                margin: "10px ",
-                backgroundColor: "white",
-              }}
-            />
-            <TextField
-              select
-              label="اختر التخصص:"
-              variant="outlined"
-              value={selectedSpecialization ? selectedSpecialization.id : ""}
-              onChange={handleSpecializationChange}
-              style={{ margin: "10px", backgroundColor: "white" }}
-            >
-              {specializations.map((spec) => (
-                <MenuItem key={spec.id} value={spec.id}>
-                  {spec.name}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              select
-              label="اختر الصف"
-              variant="outlined"
-              value={grade_id ? grade_id.id : ""}
-              onChange={handleGradeChange}
-              style={{ margin: "10px", backgroundColor: "white" }}
-            >
-              {grades.map((grade) => (
-                <MenuItem key={grade.id} value={grade.id}>
-                  {grade.attributes.name}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <Button onClick={handleCreateAccount}>إنشاء الحساب</Button>
-          </div>
-        </form>
-      </div>
+            <form style={{ display: "grid", margin: "50px" }}>
+              <TextField
+                style={{ margin: "10px 0" }}
+                id="filled-basic"
+                label={
+                  <div>
+                    <PersonIcon style={{ color: "#0079d9" }} />
+                    name
+                  </div>
+                }
+                variant="filled"
+              />
+              <TextField
+                style={{ margin: "10px 0" }}
+                id="filled-basic"
+                label={
+                  <div>
+                    <AlternateEmailIcon style={{ color: "#0079d9" }} />
+                    email
+                  </div>
+                }
+                variant="filled"
+              />
+              <TextField
+                style={{ margin: "10px 0" }}
+                id="filled-basic"
+                label={
+                  <div>
+                    <PhoneIcon style={{ color: "#0079d9" }} />
+                    phone
+                  </div>
+                }
+                variant="filled"
+              />
+              <TextField
+                style={{ margin: "10px 0" }}
+                id="filled-basic"
+                type="password"
+                label={
+                  <div>
+                    <LockIcon style={{ color: "#0079d9" }} />
+                    password
+                  </div>
+                }
+                variant="filled"
+              />
+              <TextField
+                style={{ margin: "10px 0" }}
+                type="password"
+                id="filled-basic"
+                label={
+                  <div>
+                    <LockIcon style={{ color: "#0079d9" }} />
+                    password_confirmation
+                  </div>
+                }
+                variant="filled"
+              />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <TextField
+                  select
+                  label="اختر التخصص:"
+                  value={
+                    selectedSpecialization ? selectedSpecialization.id : ""
+                  }
+                  onChange={handleSpecializationChange}
+                  variant="outlined"
+                  style={{ margin: "10px 0", width: "48%" }}
+                >
+                  {specializations.map((spec) => (
+                    <MenuItem key={spec.id} value={spec.id}>
+                      {spec.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  value={grade_id ? grade_id.id : ""}
+                  onChange={handleGradeChange}
+                  select
+                  label="اختر الصف"
+                  variant="outlined"
+                  style={{ margin: "10px 0", width: "48%" }}
+                >
+                  {grades.map((grade) => (
+                    <MenuItem key={grade.id} value={grade.id}>
+                      {grade.attributes.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </div>
+              <Button>انشاء الحساب </Button>
+              <h5 style={{ direction: "rtl", marginTop: "30px" }}>
+                {" "}
+                يوجد لديك حساب بالفعل ؟{" "}
+                <Link
+                  to="/login"
+                  style={{ color: "red", textDecoration: "none" }}
+                >
+                  {" "}
+                  ادخل الى حسابك الان !{" "}
+                </Link>
+                <Link to="/admin">admin</Link>
+              </h5>
+            </form>
+          </Col>
+          <Col lg={6} md={12} className="text-center">
+            <img style={{ width: "300px" }} src={img} alt="Image" />
+          </Col>
+        </Row>
+      </Container>
+      <ScrollToTop />
     </div>
   );
 };

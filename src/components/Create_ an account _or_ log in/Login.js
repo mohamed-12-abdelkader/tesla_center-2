@@ -1,73 +1,67 @@
 import React from "react";
-import TextField from "@mui/material/TextField";
-import { Button } from "../Ui";
+import { Link } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import LockIcon from "@mui/icons-material/Lock";
+import img from "../../imgs/download.png";
+import { Container, Row, Col } from "react-bootstrap";
+import ScrollToTop from "../Scroll/ScrollToTop";
 const Login = () => {
   return (
-    <div
-      className="form"
-      style={{
-        textAlign: "center",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          height: "90vh",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <form
-          style={{
-            width: "500px",
-            boxShadow: " 0 0 10px rgba(0, 0, 0, 0.5)",
-            marginBottom: "50px",
-            backgroundColor: "#cccccc42",
-            borderRadius: "20px",
-          }}
-        >
-          <div>
-            <h3 style={{ margin: "20px", color: "white", fontWeight: "bold" }}>
-              {" "}
-              تسجيل الدخول{" "}
+    <>
+      <Container style={{ marginTop: "100px", direction: "" }}>
+        <Row>
+          <Col lg={6} md={12}>
+            <h3 style={{ direction: "rtl" }}>
+              تسجيل <span style={{ color: "red" }}> الدخول:</span>
             </h3>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              width: "450px",
-              margin: "auto",
-              marginBottom: "20px",
-            }}
-          >
-            <TextField
-              id="outlined-basic"
-              label=" الايميل  "
-              variant="outlined"
-              style={{
-                width: "450px",
-                margin: "10px auto",
-                backgroundColor: "white",
-                borderRadius: "15px",
-              }}
-            />
-            <TextField
-              id="outlined-basic"
-              label="كلمة السر "
-              variant="outlined"
-              style={{
-                width: "450px",
-                margin: "10px auto",
-                backgroundColor: "white",
-                borderRadius: "15px",
-              }}
-            />
-            <Button size="smal">تسجيل الدخول </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+            <form style={{ display: "grid", margin: "50px" }}>
+              <TextField
+                style={{ margin: "10px 0" }}
+                id="filled-basic"
+                label={
+                  <div>
+                    <AlternateEmailIcon style={{ color: "#0079d9" }} />
+                    email
+                  </div>
+                }
+                variant="filled"
+              />
+
+              <TextField
+                style={{ margin: "10px 0" }}
+                id="filled-basic"
+                type="password"
+                label={
+                  <div>
+                    <LockIcon style={{ color: "#0079d9" }} />
+                    password
+                  </div>
+                }
+                variant="filled"
+              />
+
+              <Button>تسجيل الدخول</Button>
+              <h5 style={{ direction: "rtl", marginTop: "30px" }}>
+                {" "}
+                لا يوجد لديك حساب ؟{" "}
+                <Link
+                  to="/createAccount"
+                  style={{ color: "red", textDecoration: "none" }}
+                >
+                  {" "}
+                  انشئ حسابك الان!{" "}
+                </Link>
+              </h5>
+            </form>
+          </Col>
+          <Col lg={6} md={12} className="text-center">
+            <img style={{ width: "100%" }} src={img} alt="Image" />
+          </Col>
+        </Row>
+      </Container>
+      <ScrollToTop />
+    </>
   );
 };
 

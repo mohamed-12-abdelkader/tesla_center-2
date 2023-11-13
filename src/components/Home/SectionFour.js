@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import { Slide, Zoom } from "react-awesome-reveal";
+import { Container } from "react-bootstrap";
 const SectionFour = () => {
   const AllData = [
     {
@@ -44,7 +45,7 @@ const SectionFour = () => {
     },
   ];
   return (
-    <>
+    <Container>
       <div style={{ marginTop: "50px", marginBottom: "50px" }}>
         <div style={{ textAlign: "center" }}>
           <h1 style={{ color: "black", margin: "30px 0" }}> مميزات المنصة </h1>
@@ -53,13 +54,18 @@ const SectionFour = () => {
         <Slide direction="3000">
           <div
             className="container"
-            style={{ display: "flex", flexWrap: "wrap" }}
+            style={{
+              display: " flex",
+              justifyContent: "center",
+              flexWrap: " wrap",
+              direction: "rtl",
+            }}
           >
             {AllData.map((Data) => {
               return (
                 <Card
                   key={Data.id}
-                  style={{ width: "18rem", margin: "20px", marginLeft: "50px" }}
+                  style={{ width: "18rem", margin: "20px 20px" }}
                 >
                   <Card.Body>
                     <div
@@ -87,7 +93,7 @@ const SectionFour = () => {
           </div>
         </Slide>
       </div>
-    </>
+    </Container>
   );
 };
 
